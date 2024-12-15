@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: aliceblue;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em 2em;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nitc-logo {
+    height: 50px;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 5.5em;
+}
+
+.nav-links a {
+    color: #5A5A5A;
+    text-decoration: none;
+    font-size: 1.1em;
+}
+
+.nav-links a:hover {
+    color: #4A3B92;
+    border-bottom: 2px solid #4A3B92;
+}
+
+.profile-icon img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+
+/* Welcome Message */
+.welcome-message {
+    text-align: center;
+    color: #5A5A5A;
+    margin: 20px 0;
+}
+
+/* Container Section */
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    padding-top: 100px;
+}
+
+.box {
+    background: #F3F0FF;
+    border-radius: 15px;
+    text-align: center;
+    padding: 30px;
+    width: 150px;
+    display: flex;
+    flex-direction: column; /* Stack image above text */
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.box img {
+    height: 60px;
+    margin-bottom: 10px; /* Space between image and text */
+}
+.box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+}
+
+.box img {
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.box a {
+    color: #4A3B92;
+    font-size: 1em;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.box a:hover {
+    color: #6B47DC;
+}

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venue Booking Request Form</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a4a4a;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="date"],
+        .form-group input[type="file"],
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .submit-button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .submit-button:active {
+            transform: translateY(1px);
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"></script>
+    
+</head>
+
+<body>
+    <div class="form-container">
+        <h2 class="form-title">Venue Booking Request</h2>
+        <form   enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="venueName">Venue Name</label>
+                <input type="text" id="venueName" name="venueName" placeholder="Enter venue name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="eventName">Event Name</label>
+                <input type="text" id="eventName" name="eventName" placeholder="Enter event name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="numberOfDays">Number of Days</label>
+                <input type="number" id="numberOfDays" name="numberOfDays" min="1" placeholder="Enter number of days"
+                    required onchange="updateDateFields()">
+            </div>
+
+            <div class="form-group">
+                <label for="startDate">Start Date</label>
+                <input type="date" id="startDate" name="startDate" required onchange="updateEndDate()">
+            </div>
+
+            <div class="form-group">
+                <label for="endDate">End Date</label>
+                <input type="date" id="endDate" name="endDate" required readonly>
+            </div>
+
+            <div id="timingFields" class="mb-3"></div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="4" placeholder="Provide a brief description"
+                    required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="documentUpload">Upload Required Documents</label>
+                <input type="file" id="documentUpload" name="documentUpload" accept=".pdf,.doc,.docx,.jpg,.png"
+                    required>
+                <small class="form-text text-muted">Supported formats: PDF, DOC, DOCX, JPG, PNG.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="comments">Additional Comments</label>
+                <textarea id="comments" name="comments" rows="2" placeholder="Any additional comments"></textarea>
+            </div>
+
+            <button type="submit" class="submit-button">Submit Request</button>
+        </form>
+    </div>
+
+    <script>
+        function updateDateFields() {
+            const numDays = document.getElementById('numberOfDays').value;
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            const timingFields = document.getElementById('timingFields');
+    
+            // Calculate end date based on start date and number of days
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + parseInt(numDays) - 1);
+            endDateInput.value = endDate.toISOString().split('T')[0];
+    
+            // Clear previous timing fields
+            timingFields.innerHTML = '';
+    
+            // Create timing fields for each day
+            for (let i = 0; i < numDays; i++) {
+                const dayDate = new Date(startDate);
+                dayDate.setDate(startDate.getDate() + i);
+    
+                const timingDiv = document.createElement('div');
+                timingDiv.classList.add('timing-input');
+    
+                const dayLabel = document.createElement('label');
+                dayLabel.classList.add('timing-label');
+                dayLabel.innerText = `Day ${i + 1} (${dayDate.toDateString()})`;
+    
+                const timeFromInput = document.createElement('input');
+                timeFromInput.type = 'time';
+                timeFromInput.className = 'form-control';
+                timeFromInput.name = `timeFromDay${i + 1}`;
+                timeFromInput.required = true;
+    
+                const timeToInput = document.createElement('input');
+                timeToInput.type = 'time';
+                timeToInput.className = 'form-control';
+                timeToInput.name = `timeToDay${i + 1}`;
+                timeToInput.required = true;
+    
+                timingDiv.appendChild(dayLabel);
+                timingDiv.appendChild(timeFromInput);
+                timingDiv.appendChild(timeToInput);
+                timingFields.appendChild(timingDiv);
+            }
+        }
+    
+        function updateEndDate() {
+            const startDateInput = document.getElementById('startDate');
+            const numDaysInput = document.getElementById('numberOfDays');
+            if (startDateInput.value && numDaysInput.value) {
+                updateDateFields();
+            }
+        }
+    </script>
+    
+
+    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js"></script>
+
+    <script>
+        // Firebase configuration (replace with your own Firebase configuration)
+        const firebaseConfig = {
+  apiKey: "AIzaSyBVPd5_wltOG4APiymVqxavWJyXNqTg9Wc",
+  authDomain: "event-management-33e8b.firebaseapp.com",
+  projectId: "event-management-33e8b",
+  storageBucket: "event-management-33e8b.firebasestorage.app",
+  messagingSenderId: "412021266672",
+  appId: "1:412021266672:web:3e913407b025c099f30a35",
+  measurementId: "G-KWEGDYC8WP"
+};
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        
+        // Initialize Firestore and Storage
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+        // Update Date Fields
+        function updateDateFields() {
+            const numDays = document.getElementById('numberOfDays').value;
+            const startDateInput = document.getElementById('startDate').value;
+            if (!startDateInput || !numDays) return;  // Ensure both fields are filled before calculation
+
+            const startDate = new Date(startDateInput);
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + parseInt(numDays) - 1);
+            document.getElementById('endDate').value = endDate.toISOString().split('T')[0];
+
+            // Generate timing fields for each day
+            const timingFields = document.getElementById('timingFields');
+            timingFields.innerHTML = ''; // Clear previous fields
+            for (let i = 0; i < numDays; i++) {
+                const dayDate = new Date(startDate);
+                dayDate.setDate(startDate.getDate() + i);
+
+                const timingDiv = document.createElement('div');
+                timingDiv.classList.add('timing-input');
+
+                const dayLabel = document.createElement('label');
+                dayLabel.classList.add('timing-label');
+                dayLabel.innerText = `Day ${i + 1} (${dayDate.toDateString()})`;
+
+                const timeFromInput = document.createElement('input');
+                timeFromInput.type = 'time';
+                timeFromInput.name = `timeFromDay${i + 1}`;
+                timeFromInput.required = true;
+
+                const timeToInput = document.createElement('input');
+                timeToInput.type = 'time';
+                timeToInput.name = `timeToDay${i + 1}`;
+                timeToInput.required = true;
+
+                timingDiv.append(dayLabel, timeFromInput, timeToInput);
+                timingFields.appendChild(timingDiv);
+            }
+        }
+
+        // Update End Date
+        function updateEndDate() {
+            if (document.getElementById('startDate').value && document.getElementById('numberOfDays').value) {
+                updateDateFields();
+            }
+        }
+
+        // Form Submission
+        document.getElementById("venueForm").addEventListener("submit", async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            const venueName = document.getElementById("venueName").value;
+            const eventName = document.getElementById("eventName").value;
+            const numberOfDays = parseInt(document.getElementById("numberOfDays").value);
+            const startDate = document.getElementById("startDate").value;
+            const endDate = document.getElementById("endDate").value;
+            const description = document.getElementById("description").value;
+            const comments = document.getElementById("comments").value;
+            const timings = [];
+
+            for (let i = 0; i < numberOfDays; i++) {
+                timings.push({
+                    day: i + 1,
+                    timeFrom: document.querySelector(`[name="timeFromDay${i + 1}"]`).value,
+                    timeTo: document.querySelector(`[name="timeToDay${i + 1}"]`).value
+                });
+            }
+
+            // File Upload Handling
+            const fileInput = document.getElementById("documentUpload").files[0];
+            let fileURL = "";
+            if (fileInput) {
+                const fileRef = storage.ref(`documents/${fileInput.name}`);
+                await fileRef.put(fileInput);
+                fileURL = await fileRef.getDownloadURL();
+            }
+
+            // Add to Firestore
+            db.collection("venueRequests").add({
+                venueName,
+                eventName,
+                numberOfDays,
+                startDate,
+                endDate,
+                description,
+                comments,
+                timings,
+                documentURL: fileURL,  // Store document URL
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                alert("Venue booking request submitted successfully!");
+                window.location.href = "student_dash.html"; 
+            }).catch((error) => {
+                console.error("Error submitting venue request: ", error);
+                alert("An error occurred while submitting the request.");
+            });
+        });
+        </script>
+        
+</body>
+
+</html>

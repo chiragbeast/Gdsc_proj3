@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - NIT Calicut Event Manager</title>
+    <style>
+        .notification-container {
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .notification-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .notification-list {
+            list-style: none;
+            padding: 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .notification-item:hover {
+            background: #f0f4f8;
+        }
+
+        .status-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: #4a4a4a;
+        }
+
+        .status-icon.accepted {
+            color: #4CAF50; /* Green color for accepted */
+        }
+
+        .status-icon.denied {
+            color: #F44336; /* Red color for denied */
+        }
+
+        .notification-details {
+            flex-grow: 1;
+        }
+
+        .notification-title-text {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .notification-time {
+            font-size: 0.9rem;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="main-content">
+        <div class="notification-container">
+            <h2 class="notification-title">Notifications</h2>
+            <ul class="notification-list">
+                <!-- Notification item: Accepted request -->
+                <li class="notification-item">
+                    <i class="fas fa-check-circle status-icon accepted"></i>
+                    <div class="notification-details">
+                        <span class="notification-title-text">Venue Booking Request Accepted</span>
+                        <p>Your request for booking the auditorium on 20th August has been approved.</p>
+                        <span class="notification-time">2 hours ago</span>
+                    </div>
+                </li>
+
+                <!-- Notification item: Denied request -->
+                <li class="notification-item">
+                    <i class="fas fa-times-circle status-icon denied"></i>
+                    <div class="notification-details">
+                        <span class="notification-title-text">Equipment Reservation Denied</span>
+                        <p>Your request for reserving audio equipment has been denied due to unavailability.</p>
+                        <span class="notification-time">1 day ago</span>
+                    </div>
+                </li>
+
+                <!-- Another example notification -->
+                <li class="notification-item">
+                    <i class="fas fa-check-circle status-icon accepted"></i>
+                    <div class="notification-details">
+                        <span class="notification-title-text">Bus Service Request Accepted</span>
+                        <p>Your bus service request for the sports event has been accepted.</p>
+                        <span class="notification-time">3 days ago</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </main>
+</body>
+</html>

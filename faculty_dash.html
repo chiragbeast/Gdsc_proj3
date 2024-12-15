@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Dashboard - NIT Calicut Event Manager</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-section img {
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #4a4a4a;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a i {
+            font-size: 1.1rem;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        .nav-links a:hover::after {
+            width: 80%;
+        }
+
+        .profile-section {
+            position: relative;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .main-content {
+            padding: 7rem 2rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .welcome-banner {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: #3b82f6;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: #3b82f6;
+            opacity: 0.8;
+        }
+
+        .requests-table {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .request-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .request-table th,
+        .request-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .request-table th {
+            background: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .request-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-denied {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+        }
+
+        .approve-btn {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .deny-btn {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .info-btn {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .main-content {
+                padding: 6rem 1rem 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-section">
+            <img src="NIT c logo.png" alt="NITC Logo" />
+        </div>
+        <div class="nav-links">
+            <a href="#"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="#"><i class="fas fa-history"></i> Review History</a>
+            <a href="#"><i class="fas fa-bell"></i> Notifications</a>
+        </div>
+        <div class="profile-section">
+            <div class="profile-icon">
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="welcome-banner">
+            <h1>Faculty Dashboard</h1>
+            <p>Review and manage student event requests</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div>
+                    <h3>Pending Reviews</h3>
+                    <p>8</p>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div>
+                    <h3>Approved Today</h3>
+                    <p>12</p>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div>
+                    <h3>Needs Information</h3>
+                    <p>3</p>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="requests-table">
+            <div class="table-header">
+                <h2>Pending Requests</h2>
+            </div>
+            <table class="request-table">
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Student</th>
+                        <th>Event Type</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>REQ-001</td>
+                        <td>John Doe</td>
+                        <td>Technical Workshop</td>
+                        <td>2024-11-15</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn approve-btn" title="Approve">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="action-btn deny-btn" title="Deny">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <button class="action-btn info-btn" title="Request Info">
+                                    <i class="fas fa-info"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>REQ-002</td>
+                        <td>Jane Smith</td>
+                        <td>Cultural Event</td>
+                        <td>2024-11-20</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn approve-btn" title="Approve">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="action-btn deny-btn" title="Deny">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <button class="action-btn info-btn" title="Request Info">
+                                    <i class="fas fa-info"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

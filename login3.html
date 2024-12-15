@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NITC Event Manager</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Apply gradient background */
+        body {
+            background: linear-gradient(to bottom, #e0f2ff, #3b82f6);
+            font-family: 'Roboto', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        /* Glass effect container */
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            max-width: 400px;
+            width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Styling for heading and buttons */
+        h2 {
+            color: #000;
+            text-align: center;
+            font-size: 25px;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+
+        /* Input field styles */
+        .form-group label {
+            font-weight: bold;
+            color: #4a4a4a;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon img {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            transform: translateY(-50%);
+            width: 17px;
+            height: 15px;
+        }
+
+        .input-icon input {
+            padding-left: 40px;
+            border-radius: 8px;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .input-icon input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+        }
+
+        .form-check-label {
+            font-weight: normal;
+        }
+
+        .or-separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .or-separator::before,
+        .or-separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .or-separator:not(:empty)::before {
+            margin-right: .25em;
+        }
+
+        .or-separator:not(:empty)::after {
+            margin-left: .25em;
+        }
+
+        .social-login button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            transition: background 0.3s ease;
+        }
+
+        .social-login button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .social-login img {
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sign in as Admin</h2>
+        <form action="/login" method="POST">
+            <div class="form-group input-icon">
+                <label for="username">Email</label>
+                <img src="gmail logo.png" alt="Email Icon">
+                <input type="email" class="form-control" placeholder="Email" id="username" name="username" required>
+            </div>
+
+            <div class="form-group input-icon">
+                <label for="password">Password</label>
+                <img src="lock logo.png" alt="Lock Icon">
+                <input type="password" class="form-control" placeholder="Password" id="password" name="password" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-6">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Remember Me</label>
+                    </div>
+                </div>
+                <div class="form-group col-6 text-right">
+                    <a href="/forgot-password">Forgot password?</a>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block mt-3">Login</button>
+        </form>
+
+        <div class="or-separator">Or</div>
+
+        <div class="social-login">
+            <button class="btn btn-light">
+                <img src="https://img.icons8.com/color/24/000000/google-logo.png" alt="Google Logo" />
+                <span style="font-size: 16px; color: #000;">Login with Google</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
